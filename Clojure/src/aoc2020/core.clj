@@ -67,7 +67,6 @@
     (println "  part two:" (count-new-valid-passwords password-spec))))
 
 
-;; Day3
 (ns day3
   (:require [clojure.string :as str]))
 
@@ -98,6 +97,7 @@
                                   (traverse 5 1 map-data)
                                   (traverse 7 1 map-data)
                                   (traverse 1 2 map-data)))))
+
 
 (ns day4
   (:require [clojure.string :as str]))
