@@ -351,8 +351,51 @@
     (println "  part two:" (fix-boot programm))))
 
 
+(ns day9
+  (:require [clojure.string :as str]))
+
+(defn- read-data [data]
+  (->> data
+       slurp
+       str/split-lines
+       (map #(BigInteger. %))))
+
+(defn- find-sum [data x]
+  (or (first (filter #(= x %) (map #(+ (first data) %) (rest data))))
+      (and data (find-sum (next data) x))))
+
+(defn- find-weakness [preamble-size data]
+  (let [preamble (take preamble-size data)
+        data (drop preamble-size data)]
+    (loop [preamble preamble
+           data data]
+      (if (find-sum preamble (first data))
+        (recur (conj (into [] (drop 1 preamble)) (first data))
+               (drop 1 data))
+        (first data)))))
+
+(defn- crack-xmas [weakness data]
+  (when data
+    (let [[state range] (reduce (fn [[_ range] n]
+                                 (let [sum (apply +' n range)]
+                                   (cond (= sum weakness) (reduced [:found range])
+                                         (> sum weakness) (reduced [:_ range])
+                                         :else [:_ (conj range n)])))
+                                [:_ []] data)]
+      (if (= state :found)
+        (+' (apply min range) (apply max range))
+        (recur weakness (next data))))))
+
+(defn encoding-error []
+  (println "Day 9 - Encoding Error")
+  (let [data (read-data "../inputs/day9.txt")
+        weakness (find-weakness 25 data)]
+    (println "  part one:" weakness)
+    (println "  part two:" (str (crack-xmas weakness data)))))
+
+
 (ns aoc2020.core
-  (:require [day1] [day2] [day3] [day4] [day5] [day6] [day7])
+  (:require [day1] [day2] [day3] [day4] [day5] [day6] [day7] [day8] [day9])
   (:gen-class))
 
 (defn -main [& _]
@@ -362,4 +405,6 @@
   (day4/passport-processing)
   (day5/binary-boarding)
   (day6/custom-customs)
-  (day7/handy-haversacks))
+  (day7/handy-haversacks)
+  (day8/handheld-halting)
+  (day9/encoding-error))
