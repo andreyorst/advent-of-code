@@ -292,10 +292,17 @@
 (defn- count-bags [bags color]
   (count (into #{} (flatten (map #(check-bag % color bags) bags)))))
 
+(defn- count-inner [bags color]
+  (let [inner-bags (bags color)]
+    (if (empty? inner-bags) 1
+        (reduce + 1 (map (fn [[color amount]]
+                           (* amount (count-inner bags color))) inner-bags)))))
+
 (defn handy-haversacks []
   (println "Day 7 - Handy Haversacks")
   (let [bags (read-bag-info "../inputs/day7.txt")]
-    (println "  part one:" (count-bags bags "shiny gold"))))
+    (println "  part one:" (count-bags bags "shiny gold"))
+    (println "  part two:" (dec (count-inner bags "shiny gold")))))
 
 
 (ns aoc2020.core
