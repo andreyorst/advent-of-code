@@ -394,17 +394,15 @@
     (println "  part two:" (str (crack-xmas weakness data)))))
 
 
-(ns aoc2020.core
-  (:require [day1] [day2] [day3] [day4] [day5] [day6] [day7] [day8] [day9])
-  (:gen-class))
+(ns aoc2020
+  (:require [day1] [day2] [day3] [day4] [day5] [day6] [day7] [day8] [day9]))
 
-(defn -main [& _]
-  (day1/report-repair)
-  (day2/password-philosophy)
-  (day3/toboggan-trajectory)
-  (day4/passport-processing)
-  (day5/binary-boarding)
-  (day6/custom-customs)
-  (day7/handy-haversacks)
-  (day8/handheld-halting)
-  (day9/encoding-error))
+(day1/report-repair)
+(day2/password-philosophy)
+(day3/toboggan-trajectory)
+(day4/passport-processing)
+(day5/binary-boarding)
+(day6/custom-customs)
+(day7/handy-haversacks)
+(day8/handheld-halting)
+(day9/encoding-error)
