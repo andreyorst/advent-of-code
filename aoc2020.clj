@@ -20,7 +20,7 @@
 
 (defn report-repair []
   (println "Day 1 - Report Repair")
-  (let [report (->> "../inputs/day1.txt"
+  (let [report (->> "inputs/day1.txt"
                     slurp
                     str/split-lines
                     (map #(Integer. %))
@@ -62,7 +62,7 @@
 
 (defn password-philosophy []
   (println "Day 2 - Password Philosophy")
-  (let [password-spec (read-password-spec "../inputs/day2.txt")]
+  (let [password-spec (read-password-spec "inputs/day2.txt")]
     (println "  part one:" (count-old-valid-passwords password-spec))
     (println "  part two:" (count-new-valid-passwords password-spec))))
 
@@ -90,13 +90,13 @@
 
 (defn toboggan-trajectory []
   (println "Day 3 - Toboggan Trajectory")
-  (let [map-data (read-tree-map "../inputs/day3.txt")]
+  (let [map-data (read-tree-map "inputs/day3.txt")]
     (println "  part one:" (traverse 3 1 map-data))
     (println "  part two:" (* (traverse 1 1 map-data)
-                                  (traverse 3 1 map-data)
-                                  (traverse 5 1 map-data)
-                                  (traverse 7 1 map-data)
-                                  (traverse 1 2 map-data)))))
+                              (traverse 3 1 map-data)
+                              (traverse 5 1 map-data)
+                              (traverse 7 1 map-data)
+                              (traverse 1 2 map-data)))))
 
 
 (ns day4
@@ -167,7 +167,7 @@
 
 (defn passport-processing []
   (println "Day 4 - Passport Processing")
-  (let [passport-specs (read-passport-data "../inputs/day4.txt")]
+  (let [passport-specs (read-passport-data "inputs/day4.txt")]
     (println "  part one:" (count-passports-w-all-fields passport-specs))
     (println "  part two:" (count-valid-passports passport-specs))))
 
@@ -213,7 +213,7 @@
 
 (defn binary-boarding []
   (println "Day 5 - Binary Boarding")
-  (let [boardings (read-boarding-list "../inputs/day5.txt")
+  (let [boardings (read-boarding-list "inputs/day5.txt")
         seat-ids (map calc-id boardings)]
     (println "  part one:" (apply max seat-ids))
     (println "  part two: " (my-seat seat-ids))))
@@ -256,7 +256,7 @@
 
 (defn custom-customs []
   (println "Day 6 - Custom Customs")
-  (let [answers (read-answers "../inputs/day6.txt")]
+  (let [answers (read-answers "inputs/day6.txt")]
     (println "  part one:" (count-group-answers answers))
     (println "  part two:" (count-simultaneous-answers answers))))
 
@@ -300,7 +300,7 @@
 
 (defn handy-haversacks []
   (println "Day 7 - Handy Haversacks")
-  (let [bags (read-bag-info "../inputs/day7.txt")]
+  (let [bags (read-bag-info "inputs/day7.txt")]
     (println "  part one:" (count-bags bags "shiny gold"))
     (println "  part two:" (dec (count-inner bags "shiny gold")))))
 
@@ -346,7 +346,7 @@
 
 (defn handheld-halting []
   (println "Day 8 - Handheld Halting")
-  (let [programm (read-opcodes "../inputs/day8.txt")]
+  (let [programm (read-opcodes "inputs/day8.txt")]
     (println "  part one:" (second (detect-loop programm)))
     (println "  part two:" (fix-boot programm))))
 
@@ -377,10 +377,10 @@
 (defn- crack-xmas [weakness data]
   (when data
     (let [[state range] (reduce (fn [[_ range] n]
-                                 (let [sum (apply +' n range)]
-                                   (cond (= sum weakness) (reduced [:found range])
-                                         (> sum weakness) (reduced [:_ range])
-                                         :else [:_ (conj range n)])))
+                                  (let [sum (apply +' n range)]
+                                    (cond (= sum weakness) (reduced [:found range])
+                                          (> sum weakness) (reduced [:_ range])
+                                          :else [:_ (conj range n)])))
                                 [:_ []] data)]
       (if (= state :found)
         (+' (apply min range) (apply max range))
@@ -388,14 +388,65 @@
 
 (defn encoding-error []
   (println "Day 9 - Encoding Error")
-  (let [data (read-data "../inputs/day9.txt")
+  (let [data (read-data "inputs/day9.txt")
         weakness (find-weakness 25 data)]
     (println "  part one:" weakness)
     (println "  part two:" (str (crack-xmas weakness data)))))
 
 
+(ns day10
+  (:require [clojure.string :as str]))
+
+(defn- read-jolt-adapters [input]
+  (->> input
+       slurp
+       str/split-lines
+       (map #(Integer. %))
+       (into (sorted-set))))
+
+(defn- find-adapter [max-jolts adapters]
+  (first (filter #(<= % max-jolts) adapters)))
+
+(defn- connect-adapters [adapters]
+  (loop [jolts 0
+         [one-jolts three-jolts] [0 0]
+         adapters adapters
+         old 0]
+    (if-let [adapter (find-adapter (+ jolts 3) adapters)]
+      (recur (+ jolts adapter)
+             (condp = (- adapter old)
+               1 [(inc one-jolts) three-jolts]
+               3 [one-jolts (inc three-jolts)]
+               [one-jolts three-jolts])
+             (disj adapters adapter)
+             adapter)
+      (* one-jolts (inc three-jolts)))))
+
+(defn- combinations [x]
+  (- (reduce * (repeat (- x 2) 2))
+     (if (> x 4)
+       (/ (* (inc (- x 4)) (- x 4)) 2)
+       0)))
+
+(defn- adapter-combinations [jolts]
+  (->> (conj jolts 0)
+       (partition 2 1)
+       (map (fn [[a b]] (- b a)))
+       (partition-by #(= 1 %))
+       (filter (fn [x] (every? #(= % 1) x)))
+       (map (comp combinations inc #(reduce + %)))
+       (reduce *)))
+
+(defn adapter-array []
+  (println "Day 10 - Adapter Array")
+  (let [adapters (read-jolt-adapters "inputs/day10.txt")]
+    (println "  part one:" (connect-adapters adapters))
+    (println "  part two:" (adapter-combinations adapters))))
+
+
 (ns aoc2020
-  (:require [day1] [day2] [day3] [day4] [day5] [day6] [day7] [day8] [day9]))
+  (:require [day1] [day2] [day3] [day4] [day5]
+            [day6] [day7] [day8] [day9] [day10]))
 
 (day1/report-repair)
 (day2/password-philosophy)
@@ -406,3 +457,4 @@
 (day7/handy-haversacks)
 (day8/handheld-halting)
 (day9/encoding-error)
+(day10/adapter-array)

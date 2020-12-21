@@ -1,10 +1,4 @@
-Clojure/target
-Clojure/classes
-Clojure/checkouts
-profiles.clj
-pom.xml
-pom.xml.asc
+target
 *.jar
 *.class
-Clojure/.lein-*
-Clojure/.nrepl-port
+.nrepl-port
