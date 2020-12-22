@@ -535,10 +535,63 @@
     (println "  part two:" (simulate-crowd seats wide-occupy-seats))))
 
 
+(ns day12
+  (:require [clojure.string :as str]))
+
+(defn- read-directions [input]
+  (->> input
+       slurp
+       str/split-lines
+       (map #(let [[_ dir amount] (re-find #"([LRFSEWN])(\d+)" %)]
+               [(keyword (str/lower-case (cond (= dir "S") "E"
+                                               (= dir "W") "N"
+                                               (= dir "L") "R"
+                                               :else dir)))
+                ((if (or (= dir "S") (= dir "W") (= dir "L")) - +) (Integer. amount))]))))
+
+(defn- move-ship [{:keys [n e angle] :as ship} [direction & directions]]
+  (if-let [[direction amount] direction]
+    (recur (case direction
+             (:n :e) (update ship direction #(+ amount %))
+             :r (update ship :angle #(mod (+ % amount) 360))
+             :f (condp = angle
+                  0   (update ship :n #(+ % amount))
+                  90  (update ship :e #(+ % amount))
+                  180 (update ship :n #(- % amount))
+                  270 (update ship :e #(- % amount))))
+           directions)
+    (+ (Math/abs n) (Math/abs e))))
+
+(defn- rotate-90 [{:keys [wn we] :as ship}]
+  (-> ship (assoc :wn (- we)) (assoc :we wn)))
+
+(defn- move-ship-w-waypoint [{:keys [n e wn we] :as ship} [direction & directions]]
+  (if-let [[direction amount] direction]
+    (recur (case direction
+             :n (update ship :wn #(+ amount %))
+             :e (update ship :we #(+ amount %))
+             :r (condp = (mod amount 360)
+                  0   ship
+                  90  (rotate-90 ship)
+                  180 (rotate-90 (rotate-90 ship))
+                  270 (rotate-90 (rotate-90 (rotate-90 ship))))
+             :f (-> ship
+                    (update :n #(+ (* wn amount) %))
+                    (update :e #(+ (* we amount) %))))
+           directions)
+    (+ (Math/abs n) (Math/abs e))))
+
+(defn rain-risk []
+  (println "Day 12 - Rain Risk")
+  (let [directions (read-directions "inputs/day12.txt")]
+    (println "  part one:" (move-ship {:n 0 :e 0 :angle 90} directions))
+    (println "  part two:" (move-ship-w-waypoint {:n 0 :e 0 :wn 1 :we 10} directions))))
+
+
 (ns aoc2020
   (:require [day1] [day2] [day3] [day4] [day5]
             [day6] [day7] [day8] [day9] [day10]
-            [day11]))
+            [day11] [day12]))
 
 (day1/report-repair)
 (day2/password-philosophy)
