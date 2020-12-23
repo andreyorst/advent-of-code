@@ -562,30 +562,32 @@
            directions)
     (+ (Math/abs n) (Math/abs e))))
 
-(defn- rotate-90 [{:keys [wn we] :as ship}]
-  (-> ship (assoc :wn (- we)) (assoc :we wn)))
+;; FIXME: this solution is not correct
 
-(defn- move-ship-w-waypoint [{:keys [n e wn we] :as ship} [direction & directions]]
-  (if-let [[direction amount] direction]
-    (recur (case direction
-             :n (update ship :wn #(+ amount %))
-             :e (update ship :we #(+ amount %))
-             :r (condp = (mod amount 360)
-                  0   ship
-                  90  (rotate-90 ship)
-                  180 (rotate-90 (rotate-90 ship))
-                  270 (rotate-90 (rotate-90 (rotate-90 ship))))
-             :f (-> ship
-                    (update :n #(+ (* wn amount) %))
-                    (update :e #(+ (* we amount) %))))
-           directions)
-    (+ (Math/abs n) (Math/abs e))))
+#_(defn- rotate-90 [{:keys [wn we] :as ship}]
+    (-> ship (assoc :wn (- we)) (assoc :we wn)))
+
+#_(defn- move-ship-w-waypoint [{:keys [n e wn we] :as ship} [direction & directions]]
+    (if-let [[direction amount] direction]
+      (recur (case direction
+               :n (update ship :wn #(+ amount %))
+               :e (update ship :we #(+ amount %))
+               :r (condp = (mod amount 360)
+                    0   ship
+                    90  (rotate-90 ship)
+                    180 (rotate-90 (rotate-90 ship))
+                    270 (rotate-90 (rotate-90 (rotate-90 ship))))
+               :f (-> ship
+                      (update :n #(+ (* wn amount) %))
+                      (update :e #(+ (* we amount) %))))
+             directions)
+      (+ (Math/abs n) (Math/abs e))))
 
 (defn rain-risk []
   (println "Day 12 - Rain Risk")
   (let [directions (read-directions "inputs/day12.txt")]
     (println "  part one:" (move-ship {:n 0 :e 0 :angle 90} directions))
-    (println "  part two:" (move-ship-w-waypoint {:n 0 :e 0 :wn 1 :we 10} directions))))
+    #_(println "  part two:" (move-ship-w-waypoint {:n 0 :e 0 :wn 1 :we 10} directions))))
 
 
 (ns aoc2020
@@ -604,3 +606,4 @@
 (day9/encoding-error)
 (day10/adapter-array)
 (day11/seating-system)
+(day12/rain-risk)
