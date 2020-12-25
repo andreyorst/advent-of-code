@@ -1,7 +1,25 @@
 (ns day1
   (:require [clojure.string :as str]))
 
+(defn read-report
+  "Naively assuming that report contains only unique entries and
+  accumulating those into `hash-set` for fast lookup.
+
+  A possible workaround would be to use `frequences` function, and
+  later check if there were more than one entry."
+  [input]
+  (->> input
+       slurp
+       str/split-lines
+       (map #(Integer. %))
+       (into #{})))
+
 (defn- fix-report-two-nums
+  "Repeatedly checks if the result of subtracting current item
+  from `2020` is available in the set.
+
+  Second optional parameter is used to search for combination of three
+  numbers."
   ([report]
    (fix-report-two-nums report 0))
   ([report x]
@@ -20,13 +38,9 @@
 
 (defn report-repair []
   (println "Day 1 - Report Repair")
-  (let [report (->> "inputs/day1.txt"
-                    slurp
-                    str/split-lines
-                    (map #(Integer. %))
-                    (into #{}))]
-    (println "  part one:" (fix-report-two-nums report))
-    (println "  part two:" (fix-report-three-nums report))))
+  (let [report (read-report "inputs/day1.txt")]
+    (println "  part one:" (fix-report-two-nums report))     ;; 751776
+    (println "  part two:" (fix-report-three-nums report)))) ;; 42275090
 
 
 (ns day2
@@ -63,8 +77,8 @@
 (defn password-philosophy []
   (println "Day 2 - Password Philosophy")
   (let [password-spec (read-password-spec "inputs/day2.txt")]
-    (println "  part one:" (count-old-valid-passwords password-spec))
-    (println "  part two:" (count-new-valid-passwords password-spec))))
+    (println "  part one:" (count-old-valid-passwords password-spec))   ;; 434
+    (println "  part two:" (count-new-valid-passwords password-spec)))) ;; 509
 
 
 (ns day3
@@ -91,12 +105,12 @@
 (defn toboggan-trajectory []
   (println "Day 3 - Toboggan Trajectory")
   (let [map-data (read-tree-map "inputs/day3.txt")]
-    (println "  part one:" (traverse 3 1 map-data))
+    (println "  part one:" (traverse 3 1 map-data))       ;; 237
     (println "  part two:" (* (traverse 1 1 map-data)
                               (traverse 3 1 map-data)
                               (traverse 5 1 map-data)
                               (traverse 7 1 map-data)
-                              (traverse 1 2 map-data)))))
+                              (traverse 1 2 map-data))))) ;; 2106818610
 
 
 (ns day4
@@ -168,8 +182,8 @@
 (defn passport-processing []
   (println "Day 4 - Passport Processing")
   (let [passport-specs (read-passport-data "inputs/day4.txt")]
-    (println "  part one:" (count-passports-w-all-fields passport-specs))
-    (println "  part two:" (count-valid-passports passport-specs))))
+    (println "  part one:" (count-passports-w-all-fields passport-specs)) ;; 196
+    (println "  part two:" (count-valid-passports passport-specs))))      ;; 114
 
 
 (ns day5
@@ -215,8 +229,8 @@
   (println "Day 5 - Binary Boarding")
   (let [boardings (read-boarding-list "inputs/day5.txt")
         seat-ids (map calc-id boardings)]
-    (println "  part one:" (apply max seat-ids))
-    (println "  part two: " (my-seat seat-ids))))
+    (println "  part one:" (apply max seat-ids))  ;; 908
+    (println "  part two: " (my-seat seat-ids)))) ;; 619
 
 
 (ns day6
@@ -257,8 +271,8 @@
 (defn custom-customs []
   (println "Day 6 - Custom Customs")
   (let [answers (read-answers "inputs/day6.txt")]
-    (println "  part one:" (count-group-answers answers))
-    (println "  part two:" (count-simultaneous-answers answers))))
+    (println "  part one:" (count-group-answers answers))          ;; 7027
+    (println "  part two:" (count-simultaneous-answers answers)))) ;; 3579
 
 
 (ns day7
@@ -301,8 +315,8 @@
 (defn handy-haversacks []
   (println "Day 7 - Handy Haversacks")
   (let [bags (read-bag-info "inputs/day7.txt")]
-    (println "  part one:" (count-bags bags "shiny gold"))
-    (println "  part two:" (dec (count-inner bags "shiny gold")))))
+    (println "  part one:" (count-bags bags "shiny gold"))          ;; 128
+    (println "  part two:" (dec (count-inner bags "shiny gold"))))) ;; 20189
 
 
 (ns day8
@@ -347,8 +361,8 @@
 (defn handheld-halting []
   (println "Day 8 - Handheld Halting")
   (let [programm (read-opcodes "inputs/day8.txt")]
-    (println "  part one:" (second (detect-loop programm)))
-    (println "  part two:" (fix-boot programm))))
+    (println "  part one:" (second (detect-loop programm))) ;; 1709
+    (println "  part two:" (fix-boot programm))))           ;; 1976
 
 
 (ns day9
@@ -390,8 +404,8 @@
   (println "Day 9 - Encoding Error")
   (let [data (read-data "inputs/day9.txt")
         weakness (find-weakness 25 data)]
-    (println "  part one:" weakness)
-    (println "  part two:" (str (crack-xmas weakness data)))))
+    (println "  part one:" weakness)                           ;; 14144619
+    (println "  part two:" (str (crack-xmas weakness data))))) ;; 1766397
 
 
 (ns day10
@@ -440,8 +454,8 @@
 (defn adapter-array []
   (println "Day 10 - Adapter Array")
   (let [adapters (read-jolt-adapters "inputs/day10.txt")]
-    (println "  part one:" (connect-adapters adapters))
-    (println "  part two:" (adapter-combinations adapters))))
+    (println "  part one:" (connect-adapters adapters))       ;; 2400
+    (println "  part two:" (adapter-combinations adapters)))) ;; 338510590509056
 
 
 (ns day11
@@ -531,8 +545,8 @@
 (defn seating-system []
   (println "Day 11 - Seating System")
   (let [seats (read-seat-data "inputs/day11.txt")]
-    (println "  part one:" (simulate-crowd seats occupy-seats))
-    (println "  part two:" (simulate-crowd seats wide-occupy-seats))))
+    (println "  part one:" (simulate-crowd seats occupy-seats))        ;; 2324
+    (println "  part two:" (simulate-crowd seats wide-occupy-seats)))) ;; 2068
 
 
 (ns day12
@@ -590,8 +604,8 @@
 (defn rain-risk []
   (println "Day 12 - Rain Risk")
   (let [directions (read-directions "inputs/day12.txt")]
-    (println "  part one:" (move-ship {:n 0 :e 0 :angle 90} directions))
-    (println "  part two:" (move-ship-to-waypoint {:n 0 :e 0 :wn 1 :we 10} directions))))
+    (println "  part one:" (move-ship {:n 0 :e 0 :angle 90} directions))                  ;; 879
+    (println "  part two:" (move-ship-to-waypoint {:n 0 :e 0 :wn 1 :we 10} directions)))) ;; 18107
 
 
 (ns aoc2020
@@ -599,15 +613,15 @@
             [day6] [day7] [day8] [day9] [day10]
             [day11] [day12]))
 
-;; (day1/report-repair)
-;; (day2/password-philosophy)
-;; (day3/toboggan-trajectory)
-;; (day4/passport-processing)
-;; (day5/binary-boarding)
-;; (day6/custom-customs)
-;; (day7/handy-haversacks)
-;; (day8/handheld-halting)
-;; (day9/encoding-error)
-;; (day10/adapter-array)
-;; (day11/seating-system)
+(day1/report-repair)
+(day2/password-philosophy)
+(day3/toboggan-trajectory)
+(day4/passport-processing)
+(day5/binary-boarding)
+(day6/custom-customs)
+(day7/handy-haversacks)
+(day8/handheld-halting)
+(day9/encoding-error)
+(day10/adapter-array)
+(day11/seating-system)
 (day12/rain-risk)
