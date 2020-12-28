@@ -657,10 +657,53 @@
     (println "  part two:" (continious-bus-departures schedule)))) ;; 626670513163231
 
 
+(ns day14
+  (:require [clojure.string :as str]))
+
+(defn- read-data [input]
+  (->> input
+       slurp
+       str/split-lines
+       (map #(cond (str/starts-with? % "mask")
+                   (let [[_ mask] (re-find #"^mask = (.*)" %)]
+                     [:mask mask])
+                   (str/starts-with? % "mem")
+                   (let [[_ addr val] (re-find #"^mem\[(\d+)\] = (\d+)" %)]
+                     [(Integer. addr) (Integer. val)])))))
+
+(defn- make-mask [mask]
+  (let [and-mask (-> mask
+                     (str/replace #"[01]" "0")
+                     (str/replace #"[X]" "1")
+                     (Long/parseLong 2))
+        or-mask (-> mask
+                    (str/replace #"[X]" "0")
+                    (Long/parseLong 2))]
+    (fn [n] (-> n (bit-and and-mask) (bit-or or-mask)))))
+
+(defn- write-to-mem [data]
+  (let [mask-fn (volatile! nil)]
+    (loop [[[instr instr-data] & data] data
+           mem {}]
+      (if instr
+        (case instr
+          :mask (do (vreset! mask-fn (make-mask instr-data))
+                    (recur data mem))
+          (recur data
+                 (assoc mem instr (@mask-fn instr-data))))
+        (apply + (vals mem))))))
+
+(defn docking-data []
+  (println "Day 14 - Docking Data")
+  (let [data (read-data "inputs/day14.txt")]
+    (println "  part one:" (write-to-mem data)) ;; 10452688630537
+    #_(println "  part two:" )))
+
+
 (ns aoc2020
   (:require [day1] [day2] [day3] [day4] [day5]
             [day6] [day7] [day8] [day9] [day10]
-            [day11] [day12] [day13]))
+            [day11] [day12] [day13] [day14]))
 
 (day1/report-repair)
 (day2/password-philosophy)
@@ -675,3 +718,4 @@
 (day11/seating-system)
 (day12/rain-risk)
 (day13/shuttle-search)
+(day14/docking-data)
