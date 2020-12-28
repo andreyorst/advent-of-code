@@ -635,8 +635,7 @@
                         (map-indexed vector)
                         (filter (fn [[_ id]] (pos-int? id))))
         #_#_ id (second (first time-slots))]
-    ;; Works for examples, but too slow for the real input,
-    ;; approximately taking about two hours to compute.
+    ;; Works for examples, but too slow for the real input
     #_(loop [timestamp id]
         (if (every? (fn [[delta id]]
                       (zero? (mod (+ timestamp delta) id)))
