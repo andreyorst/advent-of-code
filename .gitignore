@@ -2,3 +2,5 @@ target
 *.jar
 *.class
 .nrepl-port
+.lsp
+.clj-kondo
