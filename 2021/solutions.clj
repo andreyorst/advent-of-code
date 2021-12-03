@@ -23,14 +23,13 @@
 (defn- part-1 [input]
   (->> input
        (partition 2 1)
-       (reduce (fn [res [current next]]
-                 (+ res (if (> next current) 1 0)))
-               0)))
+       (filter (partial apply <))
+       count))
 
 (defn- part-2 [input]
   (->> input
        (partition 3 1)
-       (map (fn [nums] (apply + nums)))
+       (map (partial apply +))
        part-1))
 
 (defn sonar-sweep []
