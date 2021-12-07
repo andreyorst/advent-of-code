@@ -17,7 +17,6 @@
        (map count)
        (zipmap [:ones :zeroes])))
 
-
 (defn- flip-bit [b]
   (if (= b 0) 1 0))
 
