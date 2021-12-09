@@ -3,17 +3,17 @@
             [clojure.string :as str]
             [clojure.set :as set]))
 
-(defn read-input []
+(defn- read-input []
   (->> "inputs/day9"
        slurp
        str/trim
        str/split-lines
        (mapv #(mapv (fn [s] (parse-long (str s))) %))))
 
-(defn transpose [m]
+(defn- transpose [m]
   (apply mapv vector m))
 
-(defn find-minimum [row]
+(defn- find-minimum [row]
   (->> row
        (map-indexed #(and (< %2 (nth row (dec %1) 9))
                           (< %2 (nth row (inc %1) 9))
@@ -21,16 +21,16 @@
        (filter number?)
        (into [])))
 
-(defn find-row-min-points [rows]
+(defn- find-row-min-points [rows]
   (->> rows
        (mapv find-minimum)
        (map-indexed #(mapv (fn [e] [%1 e]) %2))
        (into [])))
 
-(defn to-single-level [rows]
+(defn- to-single-level [rows]
   (reduce (fn [all row] (concat all row)) [] rows))
 
-(defn lowest-points [rows]
+(defn- lowest-points [rows]
   (let [min-rows (->> rows
                       find-row-min-points
                       to-single-level
@@ -43,17 +43,17 @@
                       set)]
     (into [] (set/intersection min-rows min-cols))))
 
-(defn part-1 [input]
+(defn- part-1 [input]
   (->> input
        lowest-points
        (map #(get-in input %))
        (map inc)
        (reduce +)))
 
-(defn part-of-basin? [val lowest]
+(defn- part-of-basin? [val lowest]
   (<= lowest val 8))
 
-(defn find-basin [coords rows [x y] val]
+(defn- find-basin [coords rows [x y] val]
   (when (part-of-basin? (get-in rows [x y] 10) val)
     (vswap! coords conj [x y])
     (doseq [coord [[(inc x) y]
@@ -62,14 +62,14 @@
                    [x (dec y)]]]
       (find-basin coords rows coord (inc val)))))
 
-(defn find-basins [rows]
+(defn- find-basins [rows]
   (let [points (lowest-points rows)]
     (for [p points]
       (let [coords (volatile! #{})]
         (find-basin coords rows p (get-in rows p))
         @coords))))
 
-(defn part-2 [input]
+(defn- part-2 [input]
   (->> input
        find-basins
        (map count)

@@ -9,12 +9,12 @@
            str/trim-newline
            (str/split #","))))
 
-(defn fuel-consumption [input modifier pos]
+(defn- fuel-consumption [input modifier pos]
   (->> input
        (map #(modifier (Math/abs (- % pos))))
        (reduce +)))
 
-(defn solve
+(defn- solve
   ([input] (solve input identity))
   ([input modifier]
    (let [min (apply min input)

@@ -3,7 +3,7 @@
             [clojure.string :as str]
             [clojure.set :as set]))
 
-(defn read-input []
+(defn- read-input []
   (->> "inputs/day8"
        slurp
        str/split-lines
@@ -12,14 +12,14 @@
                 {:signals (str/split signals #"\s+")
                  :digits (str/split digits #"\s+")})))))
 
-(defn part-1 [input]
+(defn- part-1 [input]
   (->> input
        (map :digits)
        (mapcat #(map count %))
        (keep #{2 3 4 7})
        count))
 
-(defn map-signals-to-digits [signals]
+(defn- map-signals-to-digits [signals]
   (let [signals (map set signals)
         one (some #({2 %} (count %)) signals)
         four (some #({4 %} (count %)) signals)
@@ -51,7 +51,7 @@
              five six seven eight nine]
             (range 10))))
 
-(defn decode [row]
+(defn- decode [row]
   (let [{:keys [signals digits]} row
         signals->digits (map-signals-to-digits signals)]
     (->> digits
@@ -60,7 +60,7 @@
          (str/join)
          parse-long)))
 
-(defn part-2 [input]
+(defn- part-2 [input]
   (->> input
        (map decode)
        (reduce + )))
