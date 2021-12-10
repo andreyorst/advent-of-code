@@ -1,2 +1,3 @@
-{:aliases {:run {:exec-fn aoc/run}}
+{:deps {aocd/aocd {:mvn/version "0.1.1"}}
+ :aliases {:run {:exec-fn aoc/run}}
  :paths ["src" "classes"]}
