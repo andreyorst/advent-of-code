@@ -1,9 +1,9 @@
 (ns aoc-commons)
 
 (defn parse-long [s]
-  (if (string? s)
+  (if (or (char? s) (string? s))
     (try
-      (Long/valueOf s)
+      (Long/valueOf (str s))
       (catch NumberFormatException _
         nil))
     (throw (IllegalArgumentException.
