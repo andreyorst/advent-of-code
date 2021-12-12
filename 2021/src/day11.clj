@@ -77,5 +77,5 @@
 (defn run [& _]
   (println "Day 11 - Dumbo Octopus")
   (let [input (read-input)]
-    (println (part-1 input))            ; 1679
-    (println (part-2 input))))          ; 519
+    (println "  part one:" (part-1 input))            ; 1679
+    (println "  part two:" (part-2 input))))          ; 519
