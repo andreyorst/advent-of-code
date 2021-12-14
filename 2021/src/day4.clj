@@ -1,5 +1,5 @@
 (ns day4
-  (:require [aoc-commons :refer [parse-long]]
+  (:require [aoc-commons :refer [parse-long slurp-lines]]
             [clojure.string :as str]))
 
 (defn- parse-draws [lines]
@@ -18,9 +18,7 @@
        (mapv (partial mapv prepare-row))))
 
 (defn- read-input []
-  (let [lines (->> "inputs/day4"
-                   slurp
-                   str/split-lines)]
+  (let [lines (slurp-lines "inputs/day4")]
     {:draws (parse-draws (first lines))
      :boards (parse-boards (drop 1 lines))}))
 

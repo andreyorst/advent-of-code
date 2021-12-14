@@ -1,11 +1,8 @@
 (ns day10
-  (:require [clojure.string :as str]))
+  (:require [aoc-commons :refer [slurp-lines]]))
 
 (defn- read-input []
-  (->> "inputs/day10"
-       slurp
-       str/trim
-       str/split-lines))
+  (slurp-lines "inputs/day10"))
 
 (def ^:private matching
   {\( \), \{ \}, \[ \], \< \>})

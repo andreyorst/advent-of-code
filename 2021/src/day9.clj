@@ -1,13 +1,10 @@
 (ns day9
-  (:require [aoc-commons :refer [parse-long]]
-            [clojure.string :as str]
+  (:require [aoc-commons :refer [parse-long slurp-lines]]
             [clojure.set :as set]))
 
 (defn- read-input []
   (->> "inputs/day9"
-       slurp
-       str/trim
-       str/split-lines
+       slurp-lines
        (mapv #(mapv (fn [s] (parse-long (str s))) %))))
 
 (defn- transpose [m]

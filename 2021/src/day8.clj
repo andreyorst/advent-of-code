@@ -1,12 +1,11 @@
 (ns day8
-  (:require [aoc-commons :refer [parse-long]]
+  (:require [aoc-commons :refer [parse-long slurp-lines]]
             [clojure.string :as str]
             [clojure.set :as set]))
 
 (defn- read-input []
   (->> "inputs/day8"
-       slurp
-       str/split-lines
+       slurp-lines
        (map (fn [line]
               (let [[signals digits] (str/split line #"\s+\|\s+")]
                 {:signals (str/split signals #"\s+")

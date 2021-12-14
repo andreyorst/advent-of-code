@@ -1,12 +1,9 @@
 (ns day11
-  (:require [aoc-commons :refer [parse-long]]
-            [clojure.string :as str]))
+  (:require [aoc-commons :refer [parse-long slurp-lines]]))
 
 (defn- read-input []
   (->> "inputs/day11"
-       slurp
-       str/trim
-       str/split-lines
+       slurp-lines
        (mapv (partial mapv parse-long))))
 
 (defn- tick [rows]

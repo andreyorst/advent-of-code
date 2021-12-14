@@ -1,5 +1,5 @@
 (ns day5
-  (:require [aoc-commons :refer [parse-long]]
+  (:require [aoc-commons :refer [parse-long slurp-lines]]
             [clojure.string :as str]))
 
 (defn- parse-coordinates [line]
@@ -9,8 +9,7 @@
 
 (defn- read-input []
   (->> "inputs/day5"
-       slurp
-       str/split-lines
+       slurp-lines
        (map parse-coordinates)))
 
 (defn- keep-non-diagonal [coordinates]

@@ -1,11 +1,10 @@
 (ns day3
-  (:require [aoc-commons :refer [parse-long]]
+  (:require [aoc-commons :refer [parse-long slurp-lines]]
             [clojure.string :as str]))
 
 (defn- read-input []
   (->> "inputs/day3"
-       slurp
-       str/split-lines
+       slurp-lines
        (map seq)
        (map #(mapv (fn [c] (parse-long (str c))) %))))
 

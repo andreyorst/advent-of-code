@@ -1,10 +1,10 @@
 (ns day12
-  (:require [clojure.string :as str]))
+  (:require [clojure.string :as str]
+            [aoc-commons :refer [slurp-lines]]))
 
 (defn- read-input []
   (->> "inputs/day12"
-       slurp
-       str/split-lines
+       slurp-lines
        (map #(str/split % #"-"))
        (reduce
         (fn [map [start end]]

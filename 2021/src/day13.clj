@@ -1,12 +1,9 @@
 (ns day13
   (:require [clojure.string :as str]
-            [aoc-commons :refer [parse-long]]))
+            [aoc-commons :refer [parse-long slurp-lines]]))
 
 (defn- read-input []
-  (let [lines (->> "inputs/day13"
-                   slurp
-                   str/trim
-                   str/split-lines)
+  (let [lines (slurp-lines "inputs/day13")
         points (take-while seq lines)
         folds (rest (drop-while seq lines))]
     {:points (mapv #(mapv parse-long (str/split % #",")) points)
