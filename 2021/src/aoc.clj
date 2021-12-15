@@ -7,8 +7,8 @@
       (require ns)
       ((ns-resolve ns 'run)))
     (catch Exception _
-      (println (str "Skipping day " day)))))
+      (println (str "Skipped day " day)))))
 
 (defn -main [& _]
-  (doseq [day (range 1 (inc 14))]
+  (doseq [day (range 1 (inc 25))]
     (run-task day)))

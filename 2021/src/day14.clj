@@ -2,19 +2,19 @@
   (:require [clojure.string :as str]
             [aoc-commons :refer [slurp-lines]]))
 
-(defn parse-recipe [recipe]
+(defn- parse-recipe [recipe]
   (let [[pattern replacement]
         (str/split recipe #"\s+->\s+")]
     [(seq pattern) (first replacement)]))
 
-(defn read-input []
+(defn- read-input []
   (let [lines (slurp-lines "inputs/day14")
         polymer (first lines)
         recipes (drop 2 lines)]
     {:polymer (seq polymer)
      :recipes (into {} (map parse-recipe) recipes)}))
 
-(defn solve [n {:keys [polymer recipes]}]
+(defn- solve [n {:keys [polymer recipes]}]
   (loop [n n
          letters (frequencies polymer)
          pairs (frequencies (partition 2 1 polymer))]
