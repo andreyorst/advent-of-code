@@ -1,7 +1,7 @@
 (ns aoc
   (:gen-class))
 
-(defn run-task [day]
+(defn- run-task [day]
   (try
     (let [ns (symbol (str "day" day))]
       (require ns)
