@@ -16,13 +16,13 @@
     {:enhance (mapv #(if (= % \#) 1 0) enh)
      :image (img->coords img)}))
 
-(defn- enhancement [{:keys [image enhancement]} [x y] default]
-  (nth (-> (for [y [(dec y) y (inc y)]
+(defn- enhancement [{:keys [image enhance]} [x y] default]
+  (nth enhance
+       (-> (for [y [(dec y) y (inc y)]
                  x [(dec x) x (inc x)]]
              (get image [x y] default))
            str/join
-           (Long/parseLong 2))
-       enhancement))
+           (Long/parseLong 2))))
 
 (defn- enhance [{:keys [enhance image] :as img} step]
   (let [points (keys image)
@@ -38,14 +38,8 @@
                [[x y] (enhancement img [x y] default)]))
      :enhance enhance}))
 
-(defn- part-1 [input]
-  (->> (reduce #(enhance %1 %2) input (range 2))
-       :image
-       vals
-       (reduce +)))
-
-(defn- part-2 [input]
-  (->> (reduce #(enhance %1 %2) input (range 50))
+(defn- solve [n input]
+  (->> (reduce #(enhance %1 %2) input (range n))
        :image
        vals
        (reduce +)))
@@ -53,5 +47,5 @@
 (defn run [& _]
   (println "Day 20 - Trench Map")
   (let [input (read-input)]
-    (println "  part one:" (part-1 input))   ; 5619
-    (println "  part two:" (part-2 input)))) ; 20122
+    (println "  part one:" (solve 2 input))    ; 5619
+    (println "  part two:" (solve 50 input)))) ; 20122
