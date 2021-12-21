@@ -1,2 +1,1 @@
-{:aliases {:run {:exec-fn aoc/run}}
- :paths ["src" "classes"]}
+{:paths ["src"]}
