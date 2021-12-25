@@ -2,7 +2,7 @@
   (:require [clojure.string :as str]
             [aoc-commons :refer [parse-long]]))
 
-(defn read-input []
+(defn- read-input []
   (reduce #(let [[_ player pos] (re-find #".*(\d+).*(\d+)" %2)
                  player (parse-long player)
                  pos (parse-long pos)]
@@ -14,7 +14,7 @@
                slurp
                str/split-lines)))
 
-(defn step [[throws players turns] [i player]]
+(defn- step [[throws players turns] [i player]]
   (let [pos (inc (mod (+ (:pos player) (dec (first turns))) 10))
         score (+ (:score player) pos)]
     ((if (>= score 1000)
@@ -27,7 +27,7 @@
               :score score)
       (rest turns)])))
 
-(defn part-1 [input]
+(defn- part-1 [input]
   (loop [throws 0
          rolls (map (partial apply +) (partition 3 (cycle (range 1 101))))
          players input]
@@ -56,7 +56,7 @@
                (recur rolls (merge-with + wins wins')))))
          wins)))))
 
-(defn part-2 [input]
+(defn- part-2 [input]
   (apply max (vals (play input 1))))
 
 (defn run [& _]

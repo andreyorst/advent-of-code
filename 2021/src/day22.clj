@@ -2,7 +2,7 @@
   (:require [clojure.string :as str]
             [aoc-commons :refer [parse-long]]))
 
-(defn read-input []
+(defn- read-input []
   (->> "inputs/day22"
        slurp
        str/split-lines
@@ -26,18 +26,18 @@
                             cubes))))))
         {:commands []})))
 
-(defn make-cubes [{:keys [min-x max-x min-y max-y min-z max-z]}]
+(defn- make-cubes [{:keys [min-x max-x min-y max-y min-z max-z]}]
   (for [x (range min-x (inc max-x))
         y (range min-y (inc max-y))
         z (range min-z (inc max-z))]
     [x y z]))
 
-(defn reboot [cubes commands]
+(defn- reboot [cubes commands]
   (reduce (fn [state command]
             (reduce command state cubes))
           {} commands))
 
-(defn part-1 [input]
+(defn- part-1 [input]
   (->> input
        :commands
        (reboot (make-cubes {:min-x -50 :max-x 50

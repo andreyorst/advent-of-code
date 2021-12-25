@@ -1,12 +1,12 @@
 (ns day25
   (:require [aoc-commons :refer [slurp-lines transpose]]))
 
-(defn read-input []
+(defn- read-input []
   (->> "inputs/day25"
        slurp-lines
        (mapv vec)))
 
-(defn move [kind row]
+(defn- move [kind row]
   (let [len (count row)]
     (reduce-kv
      (fn [row' i c]
@@ -18,14 +18,14 @@
          row'))
      row row)))
 
-(defn step [world]
+(defn- step [world]
   (->> world
        (mapv (partial move \>))
        transpose
        (mapv (partial move \v))
        transpose))
 
-(defn part-1 [input]
+(defn- part-1 [input]
   (reduce (fn [world i]
             (let [world' (step world)]
               (if (= world' world)

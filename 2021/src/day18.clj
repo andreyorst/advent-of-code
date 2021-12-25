@@ -118,7 +118,7 @@
        (reduce sum)
        magnitude))
 
-(defn part-2 [input]
+(defn- part-2 [input]
   (->> (for [a input
              b input]
          (when-not (= a b)
@@ -126,7 +126,7 @@
        (filter some?)
        (apply max)))
 
-(defn- run [& _]
+(defn run [& _]
   (println "Day 18 - Snailfish")
   (let [input (read-input)]
     (println "  part one:" (part-1 input))   ; 3763
