@@ -1,6 +1,6 @@
 (ns day13
   (:require [clojure.string :as str]
-            [aoc-commons :refer [parse-long slurp-lines]]))
+            [aoc-commons :refer [parse-long slurp-lines transpose]]))
 
 (defn- read-input []
   (let [lines (slurp-lines "inputs/day13")
@@ -30,7 +30,7 @@
         field (into [] (repeat x (into [] (repeat y "."))))]
     (->> points
          (reduce (fn [field p] (assoc-in field p "#")) field)
-         (apply map vector)
+         transpose
          (map str/join)
          (map (partial str "  "))
          (str/join "\n")

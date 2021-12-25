@@ -1,14 +1,11 @@
 (ns day9
-  (:require [aoc-commons :refer [parse-long slurp-lines]]
+  (:require [aoc-commons :refer [parse-long slurp-lines transpose]]
             [clojure.set :as set]))
 
 (defn- read-input []
   (->> "inputs/day9"
        slurp-lines
        (mapv #(mapv (fn [s] (parse-long (str s))) %))))
-
-(defn- transpose [m]
-  (apply mapv vector m))
 
 (defn- find-minimum [row]
   (->> row

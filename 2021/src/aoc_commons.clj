@@ -12,3 +12,6 @@
 
 (defn slurp-lines [f]
   (-> f slurp str/trim str/split-lines))
+
+(defn transpose [m]
+  (apply mapv vector m))

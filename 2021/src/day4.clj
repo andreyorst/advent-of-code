@@ -1,5 +1,5 @@
 (ns day4
-  (:require [aoc-commons :refer [parse-long slurp-lines]]
+  (:require [aoc-commons :refer [parse-long slurp-lines transpose]]
             [clojure.string :as str]))
 
 (defn- parse-draws [lines]
@@ -25,12 +25,9 @@
 (defn- mark-board [number board]
   (mapv #(mapv (fn [x] (if (= number x) nil x)) %) board))
 
-(defn- rotate [board]
-  (apply mapv vector board))
-
 (defn- check-board [board]
   (when (or (some (partial every? nil?) board)
-            (some (partial every? nil?) (rotate board)))
+            (some (partial every? nil?) (transpose board)))
     board))
 
 (defn- find-winning-board [draws boards]

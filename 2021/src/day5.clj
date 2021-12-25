@@ -1,5 +1,5 @@
 (ns day5
-  (:require [aoc-commons :refer [parse-long slurp-lines]]
+  (:require [aoc-commons :refer [parse-long slurp-lines transpose]]
             [clojure.string :as str]))
 
 (defn- parse-coordinates [line]
@@ -41,7 +41,7 @@
          (reduce (fn [field [[x y] val]]
                    (assoc-in field [x y] (str val)))
                  field)
-         (apply map vector)
+         transpose
          (map str/join)
          (str/join "\n")
          println)))
